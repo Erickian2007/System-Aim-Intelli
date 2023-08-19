@@ -124,7 +124,9 @@ reload={
 
 [layer_names]
 
-3d_physics/layer_1="BodyRot"
+3d_physics/layer_1="Terrain"
+3d_physics/layer_2="Player"
+3d_physics/layer_3="BodyRot"
 
 [rendering]
 

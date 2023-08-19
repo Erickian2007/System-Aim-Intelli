@@ -3,12 +3,13 @@
 
 extends SpringArm3D
 
-@onready var player = $".."
-@onready var head = player.get_node("Mesh/Godot_Chan_Stealth_Shooter/Godot_Chan_Stealth/Skeleton3D/Head")
-@onready var head_dir = player.get_node("HeadDir")
-@onready var body_rot_area = player.get_node("BodyRot")
+@onready var player: CharacterBody3D = $".."
+@onready var head_model: Node3D = player.get_node("Mesh/Godot_Chan_Stealth_Shooter/Godot_Chan_Stealth/Skeleton3D/Head")
+@onready var body_model: MeshInstance3D = player.get_node("Mesh/Godot_Chan_Stealth_Shooter/Godot_Chan_Stealth/Skeleton3D/armor")
+@onready var head_dir: RayCast3D = player.get_node("HeadDir")
+@onready var body_rot: Area3D = player.get_node("BodyRot")
 
-@onready var camera = self.get_node("Camera")
+@onready var camera: Camera3D = self.get_node("Camera")
 
 const sensi_x = 0.002
 const sensi_y = 0.001
@@ -23,6 +24,8 @@ var weight_head_look_mouse = 0.3
 
 var weight_head_return_center_x = 3.0
 var weight_head_return_center_y = 0.1
+
+var can_rot_body: bool
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -46,33 +49,35 @@ func _input(event: InputEvent) -> void:
 
 		# 1 
 		if (Input.is_action_pressed("aim")):
-		# head look mouse direction(head_dir)
-			head.rotation_degrees.y = (
+		# head_model look mouse direction(head_dir)
+			head_model.rotation_degrees.y = (
 				lerp(
-					head.rotation_degrees.y,
+					head_model.rotation_degrees.y,
 					head_dir.rotation_degrees.y,
 					weight_head_look_mouse
 				))
-		# limit head deslocation y
-			head.rotation.x += sensi.y
-			head.rotation_degrees.x = (
-				clamp(head.rotation_degrees.x,
+		# limit head_model deslocation y
+			head_model.rotation.x += sensi.y
+			head_model.rotation_degrees.x = (
+				clamp(head_model.rotation_degrees.x,
 					limit_head_y_min,
 					limit_head_y_max
 				))
-			print(head.rotation.y)
+
+			if (head_dir.is_colliding()):
+				body_model.rotation_degrees.y = head_dir.rotation_degrees.y
 			
 func _process(delta: float) -> void:
 	# 1
 	if (!Input.is_action_pressed("aim")):
-	# return center head
-		head.rotation.x = (
-				lerp_angle(head.rotation.x,
+	# return center head_model
+		head_model.rotation.x = (
+				lerp_angle(head_model.rotation.x,
 					0.0,
 					1 * delta
 				))
-		head.rotation.y = (
-				lerp_angle(head.rotation.y,
+		head_model.rotation.y = (
+				lerp_angle(head_model.rotation.y,
 					0.0,
 					3 * delta
 				))
@@ -88,4 +93,4 @@ func _process(delta: float) -> void:
 		camera.position.x = 0.6
 	else:
 		camera.keep_aspect = camera.KEEP_HEIGHT
-		camera.position.x = 0.0
+		camera.position.x = 0.0	
