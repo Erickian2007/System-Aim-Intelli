@@ -40,6 +40,8 @@ func _input(event: InputEvent) -> void:
 		
 		self.rotation.y -= sensi.x
 		self.rotation.x -= sensi.y
+
+		head_model.rotation_degrees.y = wrapf(head_model.rotation_degrees.y, -360.0, 360)
 	# limit axys y of spring arm
 		self.rotation_degrees.x = (
 			clamp(self.rotation_degrees.x,
@@ -50,12 +52,10 @@ func _input(event: InputEvent) -> void:
 		# 1 
 		if (Input.is_action_pressed("aim")):
 		# head_model look mouse direction(head_dir)
-			head_model.rotation_degrees.y = (
-				lerp(
-					head_model.rotation_degrees.y,
-					head_dir.rotation_degrees.y,
-					weight_head_look_mouse
-				))
+			#head_model.rotation_degrees.y = (lerp(head_model.rotation_degrees.y, head_dir.rotation_degrees.y, weight_head_look_mouse))
+			var rot_mouse = self.rotation.y + deg_to_rad(180)
+			head_model.transform.basis = Basis(Vector3(0,1,0), rot_mouse)
+			#head_model.transform.basis = Basis(Vector3(0,1,0), head_dir.transform.basis.)
 		# limit head_model deslocation y
 			head_model.rotation.x += sensi.y
 			head_model.rotation_degrees.x = (
@@ -65,7 +65,12 @@ func _input(event: InputEvent) -> void:
 				))
 
 			if (head_dir.is_colliding()):
-				body_model.rotation_degrees.y = head_dir.rotation_degrees.y
+				body_model.rotation_degrees.y = (
+					lerp(
+						body_model.rotation_degrees.y,
+						head_model.rotation_degrees.y,
+						0.3
+					))
 			
 func _process(delta: float) -> void:
 	# 1
@@ -78,7 +83,7 @@ func _process(delta: float) -> void:
 				))
 		head_model.rotation.y = (
 				lerp_angle(head_model.rotation.y,
-					0.0,
+					body_model.rotation.y,
 					3 * delta
 				))
 	
@@ -94,3 +99,5 @@ func _process(delta: float) -> void:
 	else:
 		camera.keep_aspect = camera.KEEP_HEIGHT
 		camera.position.x = 0.0	
+
+	body_rot.rotation.y = body_model.rotation.y
