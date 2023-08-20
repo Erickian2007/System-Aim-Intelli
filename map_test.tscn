@@ -41,3 +41,6 @@ shape = SubResource("ConcavePolygonShape3D_ks6eh")
 
 [node name="YBot" parent="." instance=ExtResource("2_wrif6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.537417, 0)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 7)

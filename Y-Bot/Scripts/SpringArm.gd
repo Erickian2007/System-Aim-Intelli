@@ -39,58 +39,69 @@ func _input(event: InputEvent) -> void:
 			deg_to_rad(-90),
 			deg_to_rad(90)
 		))
-		print(look_to.get_node("Y/X").rotation_degrees.y)
 	
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
+
 func _process(_delta: float) -> void:
+	# 1 - bone head
+	var bone_head_index = skeleton.find_bone("mixamorig_Head")
+	var bone_head_quat = skeleton.get_bone_pose_rotation(bone_head_index)
+	# 2 - bone body
+	var bone_body_index = skeleton.find_bone("mixamorig_Spine")
+	var _bone_body_quat = skeleton.get_bone_pose_rotation(bone_body_index)
+	look_to.rotate_object_local(Vector3.UP, self.rotation.y) 
+	# 1 - head e body seguindo mouse
+	if (Input.is_action_pressed("aim")):
+		# head_node look mouse direction(head_dir)
+		_rot(bone_head_index, bone_head_quat)
+		_cameara_cfg(camera.KEEP_WIDTH, 0.6)
+	else:
+		# head_node return center
+		_rot_head_body_return(bone_head_index, bone_head_quat)
+		_cameara_cfg(camera.KEEP_HEIGHT, 0.0)
+		
+func _rot(bone_index, bone_quat) -> void:
+	var quat_mouse_pos = (
+		Vector3(
+			-self.rotation.x,
+			look_to.get_node("Y/X").rotation.y,
+			0.0
+	))
+	var quat = bone_quat.from_euler(quat_mouse_pos)
+	# 1 - olha para a direção do mouse
+	skeleton.set_bone_pose_rotation(bone_index, quat)
+	
+func _rot_head_body_return(_bone_index, _bone_quat) -> void:		
+#	var linear_head_return = lerp(bone_head_quat.get_euler().y, 0.0, 0.3)
+#	var linear_body_return = lerp(bone_body_quat.get_euler(), Vector3.ZERO, 0.2)
+#
+#	var vec_head = Vector3(0.0, linear_head_return, 0.0)
+#	var vec_body = Vector3(0.0, linear_body_return, 0.0)
+#
+#	var quat_head = bone_head_quat.from_euler(vec_head)
+#	skeleton.set_bone_pose_rotation(bone_head_index, quat_head)
+	
+#	var quat_body = bone_body_quat.from_euler(vec_body)
+#	skeleton.set_bone_pose_rotation(bone_body_index, quat_body)
+#	
+	look_to.get_node("Y/X").transform.basis = Basis()
+			
+func _rot_model() -> void:
+	model.rotation.y = (
+		lerp_angle(
+			model.rotation.y,
+			self.rotation.y + deg_to_rad(180),
+			0.2
+			))
+
+func _visible_mouse() -> void:
 	if (Input.is_action_pressed("ui_down")):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	elif (Input.is_action_just_pressed("ui_up")):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		
-	look_to.rotate_object_local(Vector3.UP, self.rotation.y) 
-	
-	# 1 - bone head
-	var bone_index = skeleton.find_bone("mixamorig_Head")
-	var bone_quat = skeleton.get_bone_pose_rotation(bone_index)
 
-	# 1 - head e body seguindo mouse
-	if (Input.is_action_pressed("aim")):
-		# head_node look mouse direction(head_dir)
-		camera.keep_aspect = camera.KEEP_WIDTH
-		camera.position.x = 0.6
-		# 1- model olha para a direção do mouse
-		model.rotation.y = (
-			lerp_angle(
-				model.rotation.y,
-				self.rotation.y + deg_to_rad(180),
-				0.2
-				))
-		var quat_mouse_pos = (
-			Vector3(
-				-self.rotation.x,
-				look_to.get_node("Y/X").rotation.y,
-				0.0
-			))
-		var quat = bone_quat.from_euler(quat_mouse_pos)
-		# 1 - head olha para a direção do mouse
-		skeleton.set_bone_pose_rotation(bone_index, quat)
-
-	else:
-		# head_node return center
-		camera.keep_aspect = camera.KEEP_HEIGHT
-		camera.position.x = 0.0
-		
-		var linear_return = lerp(bone_quat.get_euler().y, 0.0, 0.3)
-
-		var quat_mouse_pos = (
-			Vector3(
-				0.0,
-				linear_return,
-				0.0
-			))
-		var quat = bone_quat.from_euler(quat_mouse_pos)
-		skeleton.set_bone_pose_rotation(bone_index, quat)
-		look_to.get_node("Y/X").transform.basis = Basis()
+func _cameara_cfg(mode: Camera3D.KeepAspect, pos_x: float) -> void:
+	camera.keep_aspect = mode
+	camera.position.x = pos_x
