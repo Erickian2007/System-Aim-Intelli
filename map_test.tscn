@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://cs13qg3xa5d3i"]
 
-[ext_resource type="PackedScene" uid="uid://ciwbeyjts262r" path="res://Player/Player.tscn" id="1_2qniw"]
 [ext_resource type="Texture2D" uid="uid://codimdjhlclt" path="res://Grid.png" id="1_q587d"]
+[ext_resource type="PackedScene" uid="uid://b1jbcglwtfsak" path="res://Y-Bot/YBot.tscn" id="2_wrif6"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_r03ne"]
 
@@ -39,5 +39,5 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_ks6eh")
 
-[node name="Player" parent="." instance=ExtResource("1_2qniw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.511181, 0)
+[node name="YBot" parent="." instance=ExtResource("2_wrif6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.537417, 0)

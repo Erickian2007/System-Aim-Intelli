@@ -4,6 +4,7 @@
 extends SpringArm3D
 
 @onready var player: CharacterBody3D = $".."
+@onready var model: Node3D = player.get_node("Mesh")
 @onready var bone_node: Skeleton3D = player.get_node("Mesh/Godot_Chan_Stealth_Shooter/Godot_Chan_Stealth/Skeleton3D")
 @onready var head_node: Node3D = player.get_node("Mesh/Godot_Chan_Stealth_Shooter/Godot_Chan_Stealth/Skeleton3D/Head")
 @onready var body_model: MeshInstance3D = player.get_node("Mesh/Godot_Chan_Stealth_Shooter/Godot_Chan_Stealth/Skeleton3D/armor")
@@ -52,7 +53,7 @@ func _input(event: InputEvent) -> void:
 			limit_mouse_y_min,
 			limit_mouse_y_max
 			))
-			
+		head_dir.rotation.y = self.rotation.y
 func _process(delta: float) -> void:
 	# 1 - head e body seguindo mouse
 	if (Input.is_action_pressed("aim")):
@@ -64,15 +65,13 @@ func _process(delta: float) -> void:
 		# head_node return center
 		camera.keep_aspect = camera.KEEP_HEIGHT
 		camera.position.x = 0.0	
-		
-	body_rot.rotation.y = body_model.rotation.y
-
 func _rot_spine(_delta: float) -> void:
-	#var min_rot = deg_to_rad(-90) + deg_to_rad(180)
-	#var max_rot = deg_to_rad(90) + deg_to_rad(180)
+	var min_rot = deg_to_rad(-90) + deg_to_rad(180)
+	var max_rot = deg_to_rad(90) + deg_to_rad(180)
 	var bone_index = bone_node.find_bone("spine_02")
 	var bone_quat = bone_node.get_bone_pose_rotation(bone_index)
-	var ventor = Vector3(-self.rotation.x, self.rotation.y + deg_to_rad(180), self.rotation.z)
+	var y_clamp = clamp(self.rotation.y, min_rot, max_rot)
+	var ventor = Vector3(-self.rotation.x, y_clamp + deg_to_rad(180), self.rotation.z)
 	print(deg_to_rad(ventor.y))
 	var quat = bone_quat.from_euler(ventor)
 	bone_node.set_bone_pose_rotation(bone_index, quat)
