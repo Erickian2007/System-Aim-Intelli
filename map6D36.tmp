@@ -1,0 +1,46 @@
+[gd_scene load_steps=9 format=3 uid="uid://cs13qg3xa5d3i"]
+
+[ext_resource type="Texture2D" uid="uid://codimdjhlclt" path="res://Grid.png" id="1_q587d"]
+[ext_resource type="PackedScene" uid="uid://b1jbcglwtfsak" path="res://Y-Bot/YBot.tscn" id="2_wrif6"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_r03ne"]
+
+[sub_resource type="Sky" id="Sky_ej702"]
+sky_material = SubResource("ProceduralSkyMaterial_r03ne")
+
+[sub_resource type="Environment" id="Environment_iwx1v"]
+background_mode = 2
+sky = SubResource("Sky_ej702")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mt6wr"]
+albedo_texture = ExtResource("1_q587d")
+
+[sub_resource type="BoxMesh" id="BoxMesh_842e2"]
+material = SubResource("StandardMaterial3D_mt6wr")
+size = Vector3(50, 1, 50)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ks6eh"]
+data = PackedVector3Array(-25, 0.5, 25, 25, 0.5, 25, -25, -0.5, 25, 25, 0.5, 25, 25, -0.5, 25, -25, -0.5, 25, 25, 0.5, -25, -25, 0.5, -25, 25, -0.5, -25, -25, 0.5, -25, -25, -0.5, -25, 25, -0.5, -25, 25, 0.5, 25, 25, 0.5, -25, 25, -0.5, 25, 25, 0.5, -25, 25, -0.5, -25, 25, -0.5, 25, -25, 0.5, -25, -25, 0.5, 25, -25, -0.5, -25, -25, 0.5, 25, -25, -0.5, 25, -25, -0.5, -25, 25, 0.5, 25, -25, 0.5, 25, 25, 0.5, -25, -25, 0.5, 25, -25, 0.5, -25, 25, 0.5, -25, -25, -0.5, 25, 25, -0.5, 25, -25, -0.5, -25, 25, -0.5, 25, 25, -0.5, -25, -25, -0.5, -25)
+
+[node name="MapTest" type="Node"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_iwx1v")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, -0.258819, 0.965926, 0, -0.965926, -0.258819, 0, 64, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_842e2")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ks6eh")
+
+[node name="YBot" parent="." instance=ExtResource("2_wrif6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.537417, 0)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 7)
