@@ -4,7 +4,7 @@ extends SpringArm3D
 
 @onready var camera: Camera3D = self.get_node("Camera")
 
-@onready var speed: float = 0.2
+@export var speed: float = 0.2
 
 func _ready() -> void: 
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

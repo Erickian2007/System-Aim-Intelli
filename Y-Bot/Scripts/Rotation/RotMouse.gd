@@ -39,6 +39,6 @@ func _input(event: InputEvent) -> void:
 				limit_mouse_y_max
 			))
 			
-		aim_node.look_aim(ventor, spring_arm,sensi.x, sensi.y)
 func _process(delta: float) -> void:
+	aim_node.look_aim(ventor, spring_arm, delta)
 	look_to.rot(skeleton, ventor, model)

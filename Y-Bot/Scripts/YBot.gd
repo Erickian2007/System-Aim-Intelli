@@ -22,7 +22,7 @@ func _physics_process(delta: float) -> void:
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Vector3()
 	input_dir.x = Input.get_action_strength("right") - Input.get_action_strength("left")
-	input_dir.y = Input.get_action_strength("backward") - Input.get_action_strength("forward")
+	input_dir.y = Input.get_action_strength("forward") - Input.get_action_strength("backward")
 	if input_dir.length() > 0:
 		velocity.x = input_dir.x * SPEED
 		velocity.z = input_dir.y * SPEED
