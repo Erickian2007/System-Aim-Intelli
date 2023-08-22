@@ -11,6 +11,9 @@ extends Node3D
 @export var sync_with_cam: float = 5.0
 @export var target_aim: float = 4.0
 
+@export_category("Configs")
+@export var locked_aim: bool = false
+
 var area_position: Vector3
 
 var can_target: bool
@@ -58,6 +61,7 @@ func look_aim(target: Array,spring: SpringArm3D, delta: float) -> void:
 				20 * delta
 				)
 		detection_entered.global_transform.origin = center
+		detection_entered.top_level = false
 	else:
 		if (area_position.length() != 0 && can_target):
 			var look_to = lerp(
@@ -66,13 +70,12 @@ func look_aim(target: Array,spring: SpringArm3D, delta: float) -> void:
 				target_aim * delta
 				)
 			detection_entered.global_transform.origin = look_to
-			
+			detection_entered.top_level = locked_aim
 			print(error_string(OK))
 		else:
 			print(error_string(ERR_BUG))
-
 			target_detected = false
-		
+
 func _on_detection_entered_in(area: Area3D) -> void:
 	if (area.is_in_group("Targets")):
 		area_position = area.global_position
