@@ -14,7 +14,6 @@ config/name="Third Person Shooter"
 config/description="Tutorial playlist for this demo:
 
 https://www.youtube.com/playlist?list=PLqbBeBobXe08DLRMDMyY2YXLx-Q4R9Ujl"
-run/main_scene="res://map_test.tscn"
 config/features=PackedStringArray("4.1")
 config/icon="res://icon.png"
 
@@ -138,6 +137,11 @@ move_cam_l={
 move_cam_r={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":82,"key_label":0,"unicode":114,"echo":false,"script":null)
+]
+}
+curso={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":96,"key_label":0,"unicode":39,"echo":false,"script":null)
 ]
 }
 

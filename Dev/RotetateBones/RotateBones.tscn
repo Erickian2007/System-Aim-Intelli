@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c82nligmhytnt"]
+
+[ext_resource type="Script" path="res://Y-Bot/Scripts/Rotation/LookTo.gd" id="1_n35x0"]
+
+[node name="LookTo" type="Node3D"]
+script = ExtResource("1_n35x0")
+
+[node name="RotLook" type="Node3D" parent="."]
