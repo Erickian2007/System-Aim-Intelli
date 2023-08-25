@@ -7,16 +7,17 @@
 script/source = "extends Node3D
 
 # Childs
-@onready var ray: RayCast3D = self.get_node(\"RayLenght\")
-@onready var areas: Area3D = self.get_node(\"Areas\")
-@onready var target: Area3D = self.get_node(\"Areas/Target\")
-@onready var origin: Area3D = self.get_node(\"Areas/Origin\")
-@onready var aim_detection_entered: Sprite3D = self.get_node(\"Area/DetectionEntered/Sprite3D\")
-@onready var aim_detection_exited: Sprite3D = self.get_node(\"Area/DetectionExited/Sprite3D2\")
+@onready var rot_x: Node3D = self.get_node(\"RotX\")
+@onready var ray: RayCast3D = self.get_node(\"RotX/RayLenght\")
+@onready var areas: Node3D = self.get_node(\"RotX/Areas\")
+@onready var target: Area3D = self.get_node(\"RotX/Areas/Target\")
+@onready var origin: Area3D = self.get_node(\"RotX/Areas/Origin\")
+@onready var sprite_target: Sprite3D = self.get_node(\"RotX/Areas/Target/Sprite\")
+@onready var sprite_origin: Sprite3D = self.get_node(\"RotX/Areas/Origin/Sprite\")
 
 @export_category(\"Smooths\")
-@export var areas_to_ray: float = 3.5
-@export var sync_with_cam: float = 5.0
+@export var areas_to_ray: float = 1.0
+@export var sync_with_cam: float = 1.0
 @export var target_to_object: float = 1.0
 @export var target_to_origin: float = 1.0
 
@@ -30,13 +31,13 @@ var can_target: bool
 var target_detected: bool 
 
 func _ready() -> void:
-	target.area_entered.connect(_target_detected_object)
-	target.area_exited.connect(_target_exited_object)
+	target.area_entered.connect(Callable(_target_detected_object))
+	target.area_exited.connect(Callable(_target_exited_object))
 	
-	origin.area_entered.connect(_target_entered)
-	origin.area_exited.connect(_target_exited)
+	origin.area_entered.connect(Callable(_target_entered))
+	origin.area_exited.connect(Callable(_target_exited))
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	_areas_to_ray()
 	_target_to_origin()
 	_target_to_object()
@@ -44,7 +45,8 @@ func _physics_process(_delta: float) -> void:
 func _areas_to_ray() -> void:
 	if (ray.is_colliding() && !target_detected):
 			var dir = lerp(areas.transform.origin, ray.get_collision_point(), areas_to_ray)
-			areas.transform.origin = dir
+			areas.global_transform.origin = dir
+			
 func _target_to_origin() -> void:
 	if (!target_detected):
 		var dir = lerp(target.transform.origin, origin.transform.origin, target_to_origin)
@@ -81,16 +83,15 @@ func _target_exited(area: Area3D) -> void:
 size = Vector3(0.5, 0.5, 0.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0mdie"]
-size = Vector3(3, 3, 3)
 
 [node name="Aim" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 2.84217e-14, 0, 1, -1.33227e-15, 1.7029, -1.67638e-08)
 script = SubResource("GDScript_grlmq")
 locked_aim = true
 
 [node name="RayLenght" type="RayCast3D" parent="."]
 target_position = Vector3(0, 0, 15)
 collision_mask = 49
+collide_with_areas = true
 
 [node name="Areas" type="Node3D" parent="." groups=["Aim"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dl7o4gj10j08f"]
+
+[ext_resource type="PackedScene" uid="uid://caexn5v6jny4p" path="res://Dev/Aim/aim.tscn" id="1_dii10"]
+
+[node name="Aim" instance=ExtResource("1_dii10")]
+
+[node name="RayLenght" parent="." index="0"]
+collide_with_areas = true
