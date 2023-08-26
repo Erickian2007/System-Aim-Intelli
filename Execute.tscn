@@ -26,11 +26,11 @@ radius = 0.165
 height = 0.63
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_8ij24"]
-radius = 0.080236
+radius = 0.141416
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hyqxu"]
 radius = 0.160684
-height = 0.6691
+height = 0.623083
 
 [node name="Execute" type="Node3D"]
 
