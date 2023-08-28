@@ -112,13 +112,6 @@ shape = SubResource("CapsuleShape3D_2dado")
 
 [node name="TwistPivot" type="Node3D" parent="."]
 
-[node name="PitchPivot" type="Node3D" parent="TwistPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.978509, 0.206204, 0, -0.206204, 0.978509, 0, 0.796066, 2.02476)
-
-[node name="Camera3D" type="Camera3D" parent="TwistPivot/PitchPivot"]
-h_offset = 0.58
-fov = 40.1
-
 [node name="Aim" type="Node3D" parent="TwistPivot"]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 5.96046e-08, 0)
 script = SubResource("GDScript_grlmq")
@@ -166,3 +159,10 @@ texture = ExtResource("3_u5qje")
 
 [node name="Collision" type="CollisionShape3D" parent="TwistPivot/Aim/RotX/Areas/Origin"]
 shape = SubResource("BoxShape3D_0mdie")
+
+[node name="PitchPivot" type="Node3D" parent="TwistPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.978509, 0.206204, 0, -0.206204, 0.978509, 0, 0.796066, 2.02476)
+
+[node name="Camera3D" type="Camera3D" parent="TwistPivot/PitchPivot"]
+h_offset = 0.58
+fov = 40.1

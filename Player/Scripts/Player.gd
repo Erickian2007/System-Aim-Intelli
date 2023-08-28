@@ -43,7 +43,6 @@ func _physics_process(delta: float) -> void:
 	
 	twist_pivot.rotate_y(twist_input)
 	pitch_pivot.rotate_x(pitch_input)
-	aim.rotate_x(pitch_input)
 	
 	# clamps
 	aim.rotation.x = clamp(pitch_pivot.rotation.x, 
@@ -56,8 +55,8 @@ func _physics_process(delta: float) -> void:
 	body.basis = twist_pivot.basis
 	
 	var input = Input.get_action_strength("move_cam_l") - Input.get_action_strength("move_cam_r")
-	var rot = lerp(0.0, input * 0.08, 0.08)
-	twist_pivot.rotation.y += rot
+	
+	
 	
 	twist_input = 0.0
 	pitch_input = 0.0
