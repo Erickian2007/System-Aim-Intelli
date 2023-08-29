@@ -49,7 +49,11 @@ func _ready() -> void:
 	origin.area_entered.connect(Callable(_target_entered))
 	origin.area_exited.connect(Callable(_target_exited))
 
-func _physics_process(delta: float) -> void:
+func get_axis(axis: Vector3) -> void:
+	self.rotation.y = axis.y
+	rot_x.rotation.x = axis.x
+	
+	
 	_target_to_object()
 	
 func _target_to_object() -> void:
@@ -112,7 +116,14 @@ shape = SubResource("CapsuleShape3D_2dado")
 
 [node name="TwistPivot" type="Node3D" parent="."]
 
-[node name="Aim" type="Node3D" parent="TwistPivot"]
+[node name="PitchPivot" type="Node3D" parent="TwistPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.978509, 0.206204, 0, -0.206204, 0.978509, 0, 0.796066, 2.02476)
+
+[node name="Camera3D" type="Camera3D" parent="TwistPivot/PitchPivot"]
+h_offset = 0.58
+fov = 40.1
+
+[node name="Aim" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 5.96046e-08, 0)
 script = SubResource("GDScript_grlmq")
 areas_to_ray = 0.2
@@ -120,49 +131,42 @@ target_to_object = 0.2
 target_to_origin = 0.2
 locked_aim = true
 
-[node name="RotX" type="Node3D" parent="TwistPivot/Aim"]
+[node name="RotX" type="Node3D" parent="Aim"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 0.999999, 0, 8.74228e-08, 0, -0.999999, 0.32341, 0.0913441, -0.257507)
 
-[node name="RayLenght" type="RayCast3D" parent="TwistPivot/Aim/RotX"]
+[node name="RayLenght" type="RayCast3D" parent="Aim/RotX"]
 transform = Transform3D(1, -2.96462e-21, -1.42109e-14, 0, 1, 0, 1.42109e-14, 3.55271e-14, 1, 0, 0, 0)
 target_position = Vector3(0, 0, 3)
 collision_mask = 49
 collide_with_areas = true
 
-[node name="Areas" type="Node3D" parent="TwistPivot/Aim/RotX" groups=["Aim"]]
+[node name="Areas" type="Node3D" parent="Aim/RotX" groups=["Aim"]]
 transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, 0, 0, 1, -1.19209e-07, 0, 1.34601)
 
-[node name="Target" type="Area3D" parent="TwistPivot/Aim/RotX/Areas" groups=["Aim"]]
+[node name="Target" type="Area3D" parent="Aim/RotX/Areas" groups=["Aim"]]
 collision_layer = 8
 collision_mask = 16
 
-[node name="Collision" type="CollisionShape3D" parent="TwistPivot/Aim/RotX/Areas/Target"]
+[node name="Collision" type="CollisionShape3D" parent="Aim/RotX/Areas/Target"]
 shape = SubResource("SphereShape3D_2oxyl")
 
-[node name="Sprite" type="Sprite3D" parent="TwistPivot/Aim/RotX/Areas/Target"]
+[node name="Sprite" type="Sprite3D" parent="Aim/RotX/Areas/Target"]
 pixel_size = 0.0005
 billboard = 2
 no_depth_test = true
 texture = ExtResource("2_mdb7x")
 
-[node name="Origin" type="Area3D" parent="TwistPivot/Aim/RotX/Areas" groups=["Aim"]]
+[node name="Origin" type="Area3D" parent="Aim/RotX/Areas" groups=["Aim"]]
 transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 1.42109e-14, 0, 1, 0, 0, 0)
 collision_layer = 0
 collision_mask = 8
 
-[node name="Sprite" type="Sprite3D" parent="TwistPivot/Aim/RotX/Areas/Origin"]
+[node name="Sprite" type="Sprite3D" parent="Aim/RotX/Areas/Origin"]
 transform = Transform3D(1, 2.01948e-28, -1.42109e-14, 0, 1, 0, 2.13163e-14, 1.76549e-35, 1, 5.95253e-09, 7.45064e-09, -4.76837e-07)
 pixel_size = 0.0005
 billboard = 2
 no_depth_test = true
 texture = ExtResource("3_u5qje")
 
-[node name="Collision" type="CollisionShape3D" parent="TwistPivot/Aim/RotX/Areas/Origin"]
+[node name="Collision" type="CollisionShape3D" parent="Aim/RotX/Areas/Origin"]
 shape = SubResource("BoxShape3D_0mdie")
-
-[node name="PitchPivot" type="Node3D" parent="TwistPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.978509, 0.206204, 0, -0.206204, 0.978509, 0, 0.796066, 2.02476)
-
-[node name="Camera3D" type="Camera3D" parent="TwistPivot/PitchPivot"]
-h_offset = 0.58
-fov = 40.1

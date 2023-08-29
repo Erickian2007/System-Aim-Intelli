@@ -9,8 +9,9 @@ var pitch_input := 0.0
 
 @onready var twist_pivot := $TwistPivot
 @onready var pitch_pivot := $TwistPivot/PitchPivot
+@onready var camera := $TwistPivot/PitchPivot/Camera3D
 @onready var body := $Body
-@onready var aim := $TwistPivot/Aim
+@onready var aim := $Aim
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -43,6 +44,7 @@ func _physics_process(delta: float) -> void:
 	
 	twist_pivot.rotate_y(twist_input)
 	pitch_pivot.rotate_x(pitch_input)
+	aim.get_axis(Vector3(camera.rotation.x, twist_pivot.rotation.y, 0.0))
 	
 	# clamps
 	aim.rotation.x = clamp(pitch_pivot.rotation.x, 
@@ -53,10 +55,6 @@ func _physics_process(delta: float) -> void:
 		deg_to_rad(30))
 	
 	body.basis = twist_pivot.basis
-	
-	var input = Input.get_action_strength("move_cam_l") - Input.get_action_strength("move_cam_r")
-	
-	
 	
 	twist_input = 0.0
 	pitch_input = 0.0
