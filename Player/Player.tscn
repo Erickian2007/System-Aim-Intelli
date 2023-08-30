@@ -53,7 +53,9 @@ func get_axis(axis: Vector3) -> void:
 	self.rotation.y = axis.y
 	rot_x.rotation.x = axis.x
 	
-	
+#	rot_x.rotation.x = clamp(rot_x.rotation.x, 
+#		deg_to_rad(-30), 
+#		deg_to_rad(30))
 	_target_to_object()
 	
 func _target_to_object() -> void:
@@ -67,7 +69,7 @@ func _target_to_object() -> void:
 	else:
 		if (ray.is_colliding()):
 			var dir = lerp(target.global_position, ray.get_collision_point(), areas_to_ray)
-			target.global_position = ray.get_collision_point()
+			target.global_position = dir
 			print(\"Seguindo O Ray\")
 		var dir = lerp(target.global_position, origin.global_position, target_to_origin)
 		target.global_position = dir
@@ -121,7 +123,6 @@ transform = Transform3D(1, 0, 0, 0, 0.978509, 0.206204, 0, -0.206204, 0.978509, 
 
 [node name="Camera3D" type="Camera3D" parent="TwistPivot/PitchPivot"]
 h_offset = 0.58
-fov = 40.1
 
 [node name="Aim" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 5.96046e-08, 0)

@@ -44,12 +44,9 @@ func _physics_process(delta: float) -> void:
 	
 	twist_pivot.rotate_y(twist_input)
 	pitch_pivot.rotate_x(pitch_input)
-	aim.get_axis(Vector3(camera.rotation.x, twist_pivot.rotation.y, 0.0))
+	aim.get_axis(Vector3(-pitch_pivot.rotation.x, twist_pivot.rotation.y, 0.0))
 	
 	# clamps
-	aim.rotation.x = clamp(pitch_pivot.rotation.x, 
-		deg_to_rad(-30), 
-		deg_to_rad(30))
 	pitch_pivot.rotation.x = clamp(pitch_pivot.rotation.x, 
 		deg_to_rad(-30), 
 		deg_to_rad(30))
