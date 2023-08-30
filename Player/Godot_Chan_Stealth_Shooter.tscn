@@ -1,5 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://daa3ljue3dk0j"]
-
-[ext_resource type="PackedScene" uid="uid://ctitjd6lgoxqd" path="res://Player/Godot_Chan_Stealth_Shooter.glb" id="1"]
-
-[node name="Godot_Chan_Stealth_Shooter" instance=ExtResource("1")]

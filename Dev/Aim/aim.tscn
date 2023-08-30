@@ -1,0 +1,123 @@
+[gd_scene load_steps=6 format=3 uid="uid://caexn5v6jny4p"]
+
+[ext_resource type="Texture2D" uid="uid://bni8fqwoea5l0" path="res://Dev/Aim/Assets/Aim Target.png" id="1_rrp45"]
+[ext_resource type="Texture2D" uid="uid://uuolw3i4hwa2" path="res://Dev/Aim/Assets/Aim.png" id="2_3n3lc"]
+
+[sub_resource type="GDScript" id="GDScript_grlmq"]
+script/source = "extends Node3D
+
+# Childs
+@onready var rot_x: Node3D = self.get_node(\"RotX\")
+@onready var ray: RayCast3D = self.get_node(\"RotX/RayLenght\")
+@onready var areas: Node3D = self.get_node(\"RotX/Areas\")
+@onready var target: Area3D = self.get_node(\"RotX/Areas/Target\")
+@onready var origin: Area3D = self.get_node(\"RotX/Areas/Origin\")
+@onready var sprite_target: Sprite3D = self.get_node(\"RotX/Areas/Target/Sprite\")
+@onready var sprite_origin: Sprite3D = self.get_node(\"RotX/Areas/Origin/Sprite\")
+
+@export_category(\"Smooths\")
+@export var areas_to_ray: float = 1.0
+@export var sync_with_cam: float = 1.0
+@export var target_to_object: float = 1.0
+@export var target_to_origin: float = 1.0
+
+
+@export_category(\"Configs\")
+@export var locked_aim: bool = false
+
+var area_position: Vector3
+
+var can_target: bool
+var target_detected: bool 
+
+func _ready() -> void:
+	target.area_entered.connect(Callable(_target_detected_object))
+	target.area_exited.connect(Callable(_target_exited_object))
+	
+	origin.area_entered.connect(Callable(_target_entered))
+	origin.area_exited.connect(Callable(_target_exited))
+
+func _physics_process(delta: float) -> void:
+	_areas_to_ray()
+	_target_to_origin()
+	_target_to_object()
+
+func _areas_to_ray() -> void:
+	if (ray.is_colliding() && !target_detected):
+			var dir = lerp(areas.transform.origin, ray.get_collision_point(), areas_to_ray)
+			areas.global_transform.origin = dir
+			
+func _target_to_origin() -> void:
+	if (!target_detected):
+		var dir = lerp(target.transform.origin, origin.transform.origin, target_to_origin)
+		target.transform.origin = dir
+		target.top_level = false
+func _target_to_object() -> void:
+	if (area_position.length() != 0 && can_target && target_detected):
+			var look_to = lerp(
+				target.transform.origin,
+				area_position,
+				target_to_object
+				)
+			target.global_transform.origin = look_to
+			target.top_level = locked_aim
+
+func _target_detected_object(area: Area3D) -> void:
+	if (area.is_in_group(\"Targets\")):
+		area_position = area.global_position
+		target_detected = true
+func _target_exited_object(area: Area3D) -> void:
+	if (area.is_in_group(\"Targets\")):
+		area_position = Vector3.ZERO
+		target_detected = false
+
+func _target_entered(area: Area3D) -> void:
+	if (area.is_in_group(\"Aim\")):
+		can_target = true
+func _target_exited(area: Area3D) -> void:
+	if (area.is_in_group(\"Aim\")):
+		can_target = false
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7xrjs"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0mdie"]
+
+[node name="Aim" type="Node3D"]
+script = SubResource("GDScript_grlmq")
+locked_aim = true
+
+[node name="RayLenght" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, 15)
+collision_mask = 49
+collide_with_areas = true
+
+[node name="Areas" type="Node3D" parent="." groups=["Aim"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="Target" type="Area3D" parent="Areas" groups=["Aim"]]
+collision_layer = 8
+collision_mask = 16
+
+[node name="Collision" type="CollisionShape3D" parent="Areas/Target"]
+shape = SubResource("BoxShape3D_7xrjs")
+
+[node name="Sprite" type="Sprite3D" parent="Areas/Target"]
+pixel_size = 0.0005
+billboard = 2
+no_depth_test = true
+texture = ExtResource("1_rrp45")
+
+[node name="Origin" type="Area3D" parent="Areas" groups=["Aim"]]
+collision_layer = 8
+collision_mask = 8
+
+[node name="Collision" type="CollisionShape3D" parent="Areas/Origin"]
+shape = SubResource("BoxShape3D_0mdie")
+
+[node name="Sprite" type="Sprite3D" parent="Areas/Origin"]
+pixel_size = 0.0005
+billboard = 2
+no_depth_test = true
+texture = ExtResource("2_3n3lc")
