@@ -14,7 +14,7 @@ config/name="Third Person Shooter"
 config/description="Tutorial playlist for this demo:
 
 https://www.youtube.com/playlist?list=PLqbBeBobXe08DLRMDMyY2YXLx-Q4R9Ujl"
-run/main_scene="res://map_test.tscn"
+run/main_scene="res://Execute.tscn"
 config/features=PackedStringArray("4.1")
 config/icon="res://icon.png"
 
@@ -24,8 +24,8 @@ Global="*res://Autoloads/Global.gd"
 
 [display]
 
-window/size/viewport_width=683
-window/size/viewport_height=384
+window/size/viewport_width=1366
+window/size/viewport_height=768
 window/stretch/mode="viewport"
 window/size/fullscreen=true
 
@@ -138,6 +138,11 @@ move_cam_l={
 move_cam_r={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":82,"key_label":0,"unicode":114,"echo":false,"script":null)
+]
+}
+curso={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":96,"key_label":0,"unicode":39,"echo":false,"script":null)
 ]
 }
 

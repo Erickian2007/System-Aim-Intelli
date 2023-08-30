@@ -1,0 +1,72 @@
+[gd_scene load_steps=12 format=3 uid="uid://b63w0jshh3jyn"]
+
+[ext_resource type="Texture2D" uid="uid://codimdjhlclt" path="res://Resources/Grid.png" id="1_5hijt"]
+[ext_resource type="PackedScene" uid="uid://c8tx2msiouup4" path="res://Player/Player.tscn" id="2_5dks1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q5lv0"]
+albedo_texture = ExtResource("1_5hijt")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_dveed"]
+size = Vector2(20, 20)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ew4v0"]
+data = PackedVector3Array(10, 0, 10, -10, 0, 10, 10, 0, -10, -10, 0, 10, -10, 0, -10, 10, 0, -10)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_u3ae7"]
+
+[sub_resource type="Sky" id="Sky_4de68"]
+sky_material = SubResource("ProceduralSkyMaterial_u3ae7")
+
+[sub_resource type="Environment" id="Environment_u7lde"]
+background_mode = 2
+sky = SubResource("Sky_4de68")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_adp5p"]
+radius = 0.165
+height = 0.63
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_8ij24"]
+radius = 0.141416
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hyqxu"]
+radius = 0.160684
+height = 0.623083
+
+[node name="Execute" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_q5lv0")
+mesh = SubResource("PlaneMesh_dveed")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+collision_mask = 34
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ew4v0")
+
+[node name="Player" parent="." instance=ExtResource("2_5dks1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_u7lde")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 5.96046e-08, 1, 0, -1, 5.96046e-08, 0, 11, 11)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.342525, -4.78947)
+mesh = SubResource("CapsuleMesh_adp5p")
+
+[node name="Area3D" type="Area3D" parent="MeshInstance3D2" groups=["Targets"]]
+collision_layer = 48
+collision_mask = 11
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D2/Area3D"]
+shape = SubResource("SphereShape3D_8ij24")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D2"]
+collision_layer = 32
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D2/StaticBody3D"]
+shape = SubResource("CapsuleShape3D_hyqxu")
