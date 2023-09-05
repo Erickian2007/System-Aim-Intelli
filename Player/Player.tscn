@@ -52,10 +52,6 @@ func _ready() -> void:
 func get_axis(axis: Vector3) -> void:
 	self.rotation.y = axis.y
 	rot_x.rotation.x = axis.x
-	
-#	rot_x.rotation.x = clamp(rot_x.rotation.x, 
-#		deg_to_rad(-30), 
-#		deg_to_rad(30))
 	_target_to_object()
 	
 func _target_to_object() -> void:
@@ -73,6 +69,7 @@ func _target_to_object() -> void:
 			print(\"Seguindo O Ray\")
 		var dir = lerp(target.global_position, origin.global_position, target_to_origin)
 		target.global_position = dir
+		target.rotation = origin.rotation
 		target.top_level = false
 		print(\"Retornando para a Origin\")
 		
@@ -80,6 +77,8 @@ func _target_detected_object(area: Area3D) -> void:
 	if (area.is_in_group(\"Targets\")):
 		area_position = area.global_position
 		target_detected = true
+		
+		print(area)
 func _target_exited_object(area: Area3D) -> void:
 	if (area.is_in_group(\"Targets\")):
 		area_position = Vector3.ZERO
@@ -94,10 +93,10 @@ func _target_exited(area: Area3D) -> void:
 		target_detected = false
 "
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_2oxyl"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_slrjx"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0mdie"]
-size = Vector3(1, 1, 3.57799)
+size = Vector3(2.85155, 1, 4)
 
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 2
@@ -121,9 +120,6 @@ shape = SubResource("CapsuleShape3D_2dado")
 [node name="PitchPivot" type="Node3D" parent="TwistPivot"]
 transform = Transform3D(1, 0, 0, 0, 0.978509, 0.206204, 0, -0.206204, 0.978509, 0, 0.796066, 2.02476)
 
-[node name="Camera3D" type="Camera3D" parent="TwistPivot/PitchPivot"]
-h_offset = 0.58
-
 [node name="Aim" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 5.96046e-08, 0)
 script = SubResource("GDScript_grlmq")
@@ -138,7 +134,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 0.999999, 0, 8.74228e-08, 0, -0.
 [node name="RayLenght" type="RayCast3D" parent="Aim/RotX"]
 transform = Transform3D(1, -2.96462e-21, -1.42109e-14, 0, 1, 0, 1.42109e-14, 3.55271e-14, 1, 0, 0, 0)
 target_position = Vector3(0, 0, 3)
-collision_mask = 49
+collision_mask = 33
 collide_with_areas = true
 
 [node name="Areas" type="Node3D" parent="Aim/RotX" groups=["Aim"]]
@@ -149,7 +145,7 @@ collision_layer = 8
 collision_mask = 16
 
 [node name="Collision" type="CollisionShape3D" parent="Aim/RotX/Areas/Target"]
-shape = SubResource("SphereShape3D_2oxyl")
+shape = SubResource("BoxShape3D_slrjx")
 
 [node name="Sprite" type="Sprite3D" parent="Aim/RotX/Areas/Target"]
 pixel_size = 0.0005
@@ -170,4 +166,13 @@ no_depth_test = true
 texture = ExtResource("3_u5qje")
 
 [node name="Collision" type="CollisionShape3D" parent="Aim/RotX/Areas/Origin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.96046e-08, 0, 0.631259)
 shape = SubResource("BoxShape3D_0mdie")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.937282, 0.348572, 0, -0.348572, 0.937282, 0, 0, 0)
+spring_length = 2.0
+
+[node name="Camera" type="Camera3D" parent="SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+h_offset = 0.58

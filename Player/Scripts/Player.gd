@@ -9,7 +9,8 @@ var pitch_input := 0.0
 
 @onready var twist_pivot := $TwistPivot
 @onready var pitch_pivot := $TwistPivot/PitchPivot
-@onready var camera := $TwistPivot/PitchPivot/Camera3D
+@onready var spring := $SpringArm3D
+@onready var camera := $SpringArm3D/Camera
 @onready var body := $Body
 @onready var aim := $Aim
 
@@ -49,6 +50,8 @@ func _physics_process(delta: float) -> void:
 	aim.get_axis(Vector3(-pitch_pivot.rotation.x, twist_pivot.rotation.y, 0.0))
 	_rot_camera_with_keys()
 	
+	
+	
 	# clamps
 	pitch_pivot.rotation.x = clamp(pitch_pivot.rotation.x, 
 		deg_to_rad(-30), 
@@ -74,6 +77,7 @@ func _rot_camera_with_keys(mult: float = 0.01, weight: float = 0.1) -> void:
 	linear = linear.slerp(Vector3(0, some * mult ,0), weight)
 	
 	twist_pivot.rotate_y(-linear.y)
+	spring.rotation.y -= linear.y
 	
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
