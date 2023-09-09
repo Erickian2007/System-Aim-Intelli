@@ -66,19 +66,16 @@ func _target_to_object() -> void:
 		if (ray.is_colliding()):
 			var dir = lerp(target.global_position, ray.get_collision_point(), areas_to_ray)
 			target.global_position = dir
-			print(\"Seguindo O Ray\")
 		var dir = lerp(target.global_position, origin.global_position, target_to_origin)
 		target.global_position = dir
 		target.rotation = origin.rotation
 		target.top_level = false
-		print(\"Retornando para a Origin\")
 		
 func _target_detected_object(area: Area3D) -> void:
 	if (area.is_in_group(\"Targets\")):
 		area_position = area.global_position
 		target_detected = true
 		
-		print(area)
 func _target_exited_object(area: Area3D) -> void:
 	if (area.is_in_group(\"Targets\")):
 		area_position = Vector3.ZERO
@@ -119,6 +116,10 @@ shape = SubResource("CapsuleShape3D_2dado")
 
 [node name="PitchPivot" type="Node3D" parent="TwistPivot"]
 transform = Transform3D(1, 0, 0, 0, 0.978509, 0.206204, 0, -0.206204, 0.978509, 0, 0.796066, 2.02476)
+
+[node name="RayCast3D" type="RayCast3D" parent="TwistPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504748, 0)
+target_position = Vector3(0, 0, -3)
 
 [node name="Aim" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 5.96046e-08, 0)

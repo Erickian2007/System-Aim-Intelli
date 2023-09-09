@@ -57,7 +57,8 @@ func _physics_process(delta: float) -> void:
 		deg_to_rad(-30), 
 		deg_to_rad(30))
 	
-	body.basis = twist_pivot.basis
+	body.rotation.y = twist_pivot.rotation.y
+	body.rotation.x = pitch_pivot.rotation.x
 	
 	twist_input = 0.0
 	pitch_input = 0.0
@@ -72,12 +73,15 @@ func _rot_camera_with_keys(mult: float = 0.01, weight: float = 0.1) -> void:
 		
 	else:
 		some = lerp(some,0.0, weight)
-		
+		spring.rotation.y = lerp_angle(spring.rotation.y,
+		twist_pivot.rotation.y,
+		0.03)
 	var linear: Vector3 
 	linear = linear.slerp(Vector3(0, some * mult ,0), weight)
 	
 	twist_pivot.rotate_y(-linear.y)
 	spring.rotation.y -= linear.y
+	
 	
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
